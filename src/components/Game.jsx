@@ -2,9 +2,10 @@ import React, { useState, useCallback, useRef } from "react";
 import { produce } from "immer";
 import Instructions from "./Instructions";
 import Menu from "./Menu";
+import RetroButton from "./RetroButton";
 
-const numRows = Math.floor(40 * 1.5);
-const numCols = Math.floor(70 * 1.5);
+const numRows = 64;
+const numCols = 130;
 const operations = [
   [0, 1],
   [0, -1],
@@ -113,45 +114,30 @@ const Game = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-4 ">
-      <Menu
-        toggleRunning={toggleRunning}
-        running={running}
-        randomizeGrid={randomizeGrid}
-        clear={clear}
-        toggleMenu={toggleMenu}
-        showMenu={showMenu}
-        applyPattern={applyPattern}
-      />
-      <div className="flex flex-wrap justify-center space-x-2">
-        <button
-          onClick={toggleInstructions}
-          className="px-6 py-2  bg-white text-black rounded-md shadow-md hover:bg-green-500 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-0 focus:ring-green-400"
-        >
-          Instructions
-        </button>
-        <button
-          onClick={toggleRunning}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400"
-        >
-          {running ? "Stop" : "Start"}
-        </button>
-        <button
-          onClick={randomizeGrid}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-400"
-        >
-          Randomize
-        </button>
-        <button
-          onClick={clear}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-400"
-        >
-          Clear
-        </button>
+    <div className="flex flex-col w-full h-full">
+      <div className=" flex flex-row w-full px-6 justify-between items-center border-b border-white p-2">
+        <h1 className=" text-base tracking-wider text-[#68d391]">
+          Conway's Game of Life
+        </h1>
+        <div className="flex flex-wrap justify-center space-x-2">
+          <RetroButton onpress={toggleInstructions} label={"Instructions"} />
+          <RetroButton
+            onpress={toggleRunning}
+            label={running ? "Stop" : "Start"}
+          />
+          <RetroButton onpress={randomizeGrid} label={"Randomize"} />
+          <RetroButton onpress={clear} label={"Clear"} />
+        </div>
+        <Menu
+          toggleMenu={toggleMenu}
+          showMenu={showMenu}
+          applyPattern={applyPattern}
+        />
       </div>
+
       <div
-        className="grid border border-white mt-2"
-        style={{ gridTemplateColumns: `repeat(${numCols}, 12px)` }}
+        className="grid border border-white mt-2 self-center"
+        style={{ gridTemplateColumns: `repeat(${numCols}, 10px)` }}
       >
         {grid.map((rows, i) =>
           rows.map((col, j) => (
@@ -163,7 +149,7 @@ const Game = () => {
                 });
                 setGrid(newGrid);
               }}
-              className={`w-3 h-3 border cursor-pointer border-zinc-900 border- ${
+              className={`w-2.5 h-2.5 border cursor-pointer border-zinc-900 border- ${
                 grid[i][j] ? "bg-zinc-300" : ""
               }`}
             />

@@ -24,7 +24,7 @@ const renderPatternPreview = (pattern) => {
             style={{
               width: `${cellSize}px`,
               height: `${cellSize}px`,
-              backgroundColor: cell === 1 ? "#d4d4d8" : "#2d3748",
+              backgroundColor: cell === 1 ? "#68d391" : "#2d3748",
             }}
           />
         ))
@@ -35,26 +35,28 @@ const renderPatternPreview = (pattern) => {
 
 const Menu = ({ showMenu, toggleMenu, applyPattern }) => {
   return (
-    <motion.div
-      className="menu absolute top-4 right-4 bg-white p-4 rounded shadow-lg w-96"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="flex justify-between items-center px-4">
-        <p className="text-xl text-center text-black">Patterns</p>
+    <motion.div>
+      <div className="flex justify-between items-center gap-2">
+        <p className="text-base text-center text-[#68d391]">Patterns</p>
         <button
           onClick={toggleMenu}
-          className="bg-black rounded text-white flex items-center justify-center px-4 py-2"
+          className="bg-[#68d391] text-black flex items-center justify-center p-2 rounded-full"
         >
           {showMenu ? <FaAngleUp /> : <FaAngleDown />}
         </button>
       </div>
-      <motion.div className={showMenu ? "block my-2" : "hidden"}>
-        <p className="text-center mb-2 text-black mt-2">Generate a Pattern</p>
+      <motion.div
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 1 }}
+        exit={{ y: 100 }}
+        className={`absolute top-16 right-4 z-10 w-80 bg-zinc-800 p-2 rounded-xl space-y-2`}
+        style={{ display: showMenu ? "block" : "none" }}
+      >
+        <p className="text-base text-center text-white">Choose a pattern</p>
         <div
-          className="flex flex-wrap gap-4 justify-between px-4 overflow-y-auto bg-zinc-800 p-4 rounded-xl"
-          style={{ maxHeight: "600px" }}
+          className="flex flex-wrap gap-1 justify-between px-2 overflow-y-auto  py-4"
+          style={{ maxHeight: "400px" }}
         >
           {Object.keys(patterns).map((pattern) => (
             <button

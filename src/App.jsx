@@ -20,10 +20,6 @@ function App() {
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-black text-white">
-      <h1 className="absolute top-4 left-4 text-3xl tracking-wider text-white">
-        Conway's Game of Life
-      </h1>
-
       {/* Display a message for mobile users */}
       {isMobile ? (
         <div className="text-center text-lg bg-red-500 p-4 rounded-md">
