@@ -163,7 +163,7 @@ const Game = () => {
                 });
                 setGrid(newGrid);
               }}
-              className={`w-3 h-3 border border-zinc-900 border- ${
+              className={`w-3 h-3 border cursor-pointer border-zinc-900 border- ${
                 grid[i][j] ? "bg-zinc-300" : ""
               }`}
             />
