@@ -1,22 +1,37 @@
-import { useState } from "react";
-import { Game, Instructions } from "./components";
+import { useState, useEffect } from "react";
+import { Game } from "./components";
 
 function App() {
-  const [showInstructions, setShowInstructions] = useState(false);
-
-  const toggleInstructions = () => setShowInstructions((prev) => !prev);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobileDevice = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+    checkMobileDevice();
+    window.addEventListener("resize", checkMobileDevice);
+    return () => {
+      window.removeEventListener("resize", checkMobileDevice);
+    };
+  }, []);
 
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center">
-      <h1 className="text-center mb-4">Conway's Game of Life</h1>
-      <button
-        onClick={toggleInstructions}
-        className="my-2 px-4 py-2 bg-white text-black rounded hover:bg-green-400"
-      >
-        Instructions
-      </button>
-      <Game />
-      {showInstructions && <Instructions onClose={toggleInstructions} />}
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-black text-white">
+      <h1 className="absolute top-4 left-4 text-3xl tracking-wider text-white">
+        Conway's Game of Life
+      </h1>
+
+      {/* Display a message for mobile users */}
+      {isMobile ? (
+        <div className="text-center text-lg bg-red-500 p-4 rounded-md">
+          <p>Please open this game on a computer for the best experience.</p>
+        </div>
+      ) : (
+        <Game />
+      )}
     </div>
   );
 }
