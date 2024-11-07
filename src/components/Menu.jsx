@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { patterns } from "../constants";
+import { patterns , sounds } from "../constants";
 import ColorPicker from "./ColorPicker";
 
 const cellSize = 6;
@@ -80,7 +80,7 @@ const Menu = ({
           {Object.keys(patterns).map((pattern) => (
             <button
               key={pattern}
-              onClick={() => applyPattern(patterns[pattern])}
+              onClick={() => {applyPattern(patterns[pattern]); sounds.cellToggle.play();}}
               className="bg-black text-white px-2 py-1 rounded hover:bg-zinc-800"
             >
               <div className="flex flex-col items-center">

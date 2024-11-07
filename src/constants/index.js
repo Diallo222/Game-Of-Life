@@ -1,3 +1,19 @@
+import { Howl } from "howler";
+
+import clickSound from "/sounds/click.wav";
+import cellSound from "/sounds/cell.wav";
+import backgroundSound from "/sounds/background.mp3";
+
+ export const sounds = {
+  click: new Howl({ src: [clickSound] }),
+  cellToggle: new Howl({ src: [cellSound] }),
+  background: new Howl({
+    src: [backgroundSound],
+    loop: true,
+    volume: 0.4,
+  })
+};
+
 export const patterns = {
   glider: [
     [1, 0],

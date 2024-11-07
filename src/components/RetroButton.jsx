@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
+import { sounds } from "../constants";
 
 const RetroButton = ({ label, onpress }) => {
   return (
     <motion.button
-      onClick={onpress}
+      onClick={() => {
+        onpress();
+        sounds.click.play();
+      }}
       whileTap={{
         scale: 0.95,
       }}

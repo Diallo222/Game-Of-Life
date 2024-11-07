@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { produce } from "immer";
 import Instructions from "./Instructions";
 import Menu from "./Menu";
 import RetroButton from "./RetroButton";
+import { sounds } from "../constants";
 
 const numRows = 64;
 const numCols = 130;
@@ -72,9 +73,19 @@ const Game = () => {
     if (!running) {
       runningRef.current = true;
       runSimulation();
+      sounds.background.play();
     }
+    else {
+      sounds.background.stop();
+    }
+    
   };
 
+  const handleCellToggle = () => {
+    sounds.cellToggle.play();
+  };
+
+  
   const randomizeGrid = () => {
     const rows = [];
     for (let i = 0; i < numRows; i++) {
@@ -114,6 +125,12 @@ const Game = () => {
       })
     );
   };
+
+  useEffect(() => {
+    return () => {
+      sounds.background.stop();
+    };
+  }, []);
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -155,6 +172,7 @@ const Game = () => {
                   gridCopy[i][j] = grid[i][j] ? 0 : 1;
                 });
                 setGrid(newGrid);
+                handleCellToggle();
               }}
               className="w-2.5 h-2.5 border cursor-pointer border-zinc-900"
               style={{
