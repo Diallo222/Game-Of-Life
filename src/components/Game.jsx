@@ -29,7 +29,7 @@ const generateEmptyGrid = () => {
 const Game = () => {
   const [grid, setGrid] = useState(() => generateEmptyGrid());
   const [running, setRunning] = useState(false);
-  const [showMenu, setShowMenu] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const [aliveColor, setAliveColor] = useState("#d4d4d8");
   const [deadColor, setDeadColor] = useState("#000000");
