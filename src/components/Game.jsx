@@ -30,6 +30,8 @@ const Game = () => {
   const [running, setRunning] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [aliveColor, setAliveColor] = useState("#d4d4d8");
+  const [deadColor, setDeadColor] = useState("#000000");
 
   const toggleInstructions = () => setShowInstructions((prev) => !prev);
   const runningRef = useRef(running);
@@ -127,14 +129,19 @@ const Game = () => {
           />
           <RetroButton onpress={randomizeGrid} label={"Randomize"} />
           <RetroButton onpress={clear} label={"Clear"} />
+         
         </div>
         <Menu
           toggleMenu={toggleMenu}
           showMenu={showMenu}
           applyPattern={applyPattern}
+          aliveColor={aliveColor}
+          setAliveColor={setAliveColor}
+          deadColor={deadColor}
+          setDeadColor={setDeadColor}
         />
       </div>
-
+      
       <div
         className="grid border border-white mt-2 self-center"
         style={{ gridTemplateColumns: `repeat(${numCols}, 10px)` }}
@@ -149,9 +156,10 @@ const Game = () => {
                 });
                 setGrid(newGrid);
               }}
-              className={`w-2.5 h-2.5 border cursor-pointer border-zinc-900 border- ${
-                grid[i][j] ? "bg-zinc-300" : ""
-              }`}
+              className="w-2.5 h-2.5 border cursor-pointer border-zinc-900"
+              style={{
+                backgroundColor: grid[i][j] ? aliveColor : deadColor,
+              }}
             />
           ))
         )}
