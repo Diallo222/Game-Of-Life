@@ -99,7 +99,7 @@ const Game = () => {
   };
 
   const clear = () => {
-    setGrid(generateEmptyGrid());
+    setGrid(generateEmptyGrid(numRows, numCols));
   };
 
   const toggleMenu = () => {
