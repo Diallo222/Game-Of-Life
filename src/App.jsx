@@ -20,7 +20,6 @@ function App() {
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-black text-white">
-      {/* Display a message for mobile users */}
       {isMobile ? (
         <div className="text-center text-lg bg-red-500 p-4 rounded-md">
           <p>Please open this game on a computer for the best experience.</p>

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { sounds } from "../constants";
 
 const Instructions = ({ onClose }) => {
   return (
@@ -43,7 +44,7 @@ const Instructions = ({ onClose }) => {
         </div>
 
         <motion.button
-          onClick={onClose}
+          onClick={() => {onClose(); sounds.click.play();}}
           className="mt-4 px-6 py-2 bg-black text-white rounded-full hover:bg-red-500 focus:outline-none"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}

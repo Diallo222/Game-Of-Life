@@ -5,7 +5,6 @@ import Menu from "./Menu";
 import RetroButton from "./RetroButton";
 import { sounds } from "../constants";
 
-
 const operations = [
   [0, 1],
   [0, -1],
@@ -34,7 +33,6 @@ const Game = () => {
   const [showInstructions, setShowInstructions] = useState(false);
   const [aliveColor, setAliveColor] = useState("#d4d4d8");
   const [deadColor, setDeadColor] = useState("#000000");
-  
 
   const toggleInstructions = () => setShowInstructions((prev) => !prev);
   const runningRef = useRef(running);
@@ -76,18 +74,15 @@ const Game = () => {
       runningRef.current = true;
       runSimulation();
       sounds.background.play();
-    }
-    else {
+    } else {
       sounds.background.stop();
     }
-    
   };
 
   const handleCellToggle = () => {
     sounds.cellToggle.play();
   };
 
-  
   const randomizeGrid = () => {
     const rows = [];
     for (let i = 0; i < numRows; i++) {
@@ -136,11 +131,11 @@ const Game = () => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className=" flex flex-row w-full px-6 justify-between items-center border-b border-white p-2">
-        <h1 className=" text-base tracking-wider text-[#68d391]">
+      <div className="flex flex-col md:flex-row w-full px-4 md:px-6 justify-between items-center border-b border-white p-2">
+        <h1 className="text-base md:text-lg lg:text-xl tracking-wider text-[#68d391] mb-2 md:mb-0">
           Conway's Game of Life
         </h1>
-        <div className="flex flex-wrap justify-center space-x-2">
+        <div className="flex flex-wrap justify-center md:justify-start space-x-2 space-y-2 md:space-y-0">
           <RetroButton onpress={toggleInstructions} label={"Instructions"} />
           <RetroButton
             onpress={toggleRunning}
@@ -148,7 +143,6 @@ const Game = () => {
           />
           <RetroButton onpress={randomizeGrid} label={"Randomize"} />
           <RetroButton onpress={clear} label={"Clear"} />
-         
         </div>
         <Menu
           toggleMenu={toggleMenu}
@@ -164,7 +158,7 @@ const Game = () => {
           numCols={numCols}
         />
       </div>
-      
+
       <div
         className="grid border border-white mt-2 self-center"
         style={{ gridTemplateColumns: `repeat(${numCols}, 10px)` }}
