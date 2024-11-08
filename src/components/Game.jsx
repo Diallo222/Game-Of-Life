@@ -5,8 +5,7 @@ import Menu from "./Menu";
 import RetroButton from "./RetroButton";
 import { sounds } from "../constants";
 
-const numRows = 64;
-const numCols = 130;
+
 const operations = [
   [0, 1],
   [0, -1],
@@ -18,7 +17,7 @@ const operations = [
   [-1, 0],
 ];
 
-const generateEmptyGrid = () => {
+const generateEmptyGrid = (numRows, numCols) => {
   const rows = [];
   for (let i = 0; i < numRows; i++) {
     rows.push(Array.from(Array(numCols), () => 0));
@@ -27,12 +26,15 @@ const generateEmptyGrid = () => {
 };
 
 const Game = () => {
-  const [grid, setGrid] = useState(() => generateEmptyGrid());
+  const [numRows, setNumRows] = useState(60);
+  const [numCols, setNumCols] = useState(100);
+  const [grid, setGrid] = useState(() => generateEmptyGrid(numRows, numCols));
   const [running, setRunning] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const [aliveColor, setAliveColor] = useState("#d4d4d8");
   const [deadColor, setDeadColor] = useState("#000000");
+  
 
   const toggleInstructions = () => setShowInstructions((prev) => !prev);
   const runningRef = useRef(running);
@@ -156,6 +158,10 @@ const Game = () => {
           setAliveColor={setAliveColor}
           deadColor={deadColor}
           setDeadColor={setDeadColor}
+          setNumRows={setNumRows}
+          setNumCols={setNumCols}
+          numRows={numRows}
+          numCols={numCols}
         />
       </div>
       
