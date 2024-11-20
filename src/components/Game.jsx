@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { produce } from "immer";
 import Instructions from "./Instructions";
 import Menu from "./Menu";
 import RetroButton from "./RetroButton";
 import { sounds } from "../constants";
+import Controls from "./Controls";
 
 const operations = [
   [0, 1],
@@ -34,6 +35,10 @@ const Game = () => {
   const [aliveColor, setAliveColor] = useState("#d4d4d8");
   const [deadColor, setDeadColor] = useState("#000000");
 
+  // Memoize expensive computations
+  const memoizedGrid = useMemo(() => grid, [grid]);
+  const memoizedOperations = useMemo(() => operations, []);
+
   const toggleInstructions = () => setShowInstructions((prev) => !prev);
   const runningRef = useRef(running);
   runningRef.current = running;
@@ -42,30 +47,36 @@ const Game = () => {
     if (!runningRef.current) {
       return;
     }
+
     setGrid((g) => {
       return produce(g, (gridCopy) => {
+        const buffer = Array(numRows).fill().map(() => Array(numCols).fill(0));
+
         for (let i = 0; i < numRows; i++) {
           for (let j = 0; j < numCols; j++) {
             let neighbors = 0;
-            operations.forEach(([x, y]) => {
-              const newI = i + x;
-              const newJ = j + y;
-              if (newI >= 0 && newI < numRows && newJ >= 0 && newJ < numCols) {
-                neighbors += g[newI][newJ];
-              }
-            });
+            if (i > 0 && j > 0) neighbors += g[i - 1][j - 1];
+            if (i > 0) neighbors += g[i - 1][j];
+            if (i > 0 && j < numCols - 1) neighbors += g[i - 1][j + 1];
+            if (j > 0) neighbors += g[i][j - 1];
+            if (j < numCols - 1) neighbors += g[i][j + 1];
+            if (i < numRows - 1 && j > 0) neighbors += g[i + 1][j - 1];
+            if (i < numRows - 1) neighbors += g[i + 1][j];
+            if (i < numRows - 1 && j < numCols - 1) neighbors += g[i + 1][j + 1];
 
-            if (neighbors < 2 || neighbors > 3) {
-              gridCopy[i][j] = 0;
-            } else if (g[i][j] === 0 && neighbors === 3) {
-              gridCopy[i][j] = 1;
-            }
+            buffer[i][j] = neighbors === 3 || (neighbors === 2 && g[i][j]);
+          }
+        }
+
+        for (let i = 0; i < numRows; i++) {
+          for (let j = 0; j < numCols; j++) {
+            gridCopy[i][j] = buffer[i][j];
           }
         }
       });
     });
 
-    setTimeout(runSimulation, 100);
+    requestAnimationFrame(runSimulation);
   }, []);
 
   const toggleRunning = () => {
@@ -135,15 +146,7 @@ const Game = () => {
         <h1 className="text-base md:text-lg lg:text-xl tracking-wider text-[#68d391] mb-2 md:mb-0">
           Conway's Game of Life
         </h1>
-        <div className="flex flex-wrap justify-center md:justify-start space-x-2 space-y-2 md:space-y-0">
-          <RetroButton onpress={toggleInstructions} label={"Instructions"} />
-          <RetroButton
-            onpress={toggleRunning}
-            label={running ? "Stop" : "Start"}
-          />
-          <RetroButton onpress={randomizeGrid} label={"Randomize"} />
-          <RetroButton onpress={clear} label={"Clear"} />
-        </div>
+        <Controls toggleInstructions={toggleInstructions} running={running} onToggle={toggleRunning} onClear={clear} onRandomize={randomizeGrid} />
         <Menu
           toggleMenu={toggleMenu}
           showMenu={showMenu}
@@ -163,20 +166,20 @@ const Game = () => {
         className="grid border border-white mt-2 self-center"
         style={{ gridTemplateColumns: `repeat(${numCols}, 10px)` }}
       >
-        {grid.map((rows, i) =>
+        {memoizedGrid.map((rows, i) =>
           rows.map((col, j) => (
             <div
               key={`${i}-${j}`}
               onClick={() => {
-                const newGrid = produce(grid, (gridCopy) => {
-                  gridCopy[i][j] = grid[i][j] ? 0 : 1;
+                const newGrid = produce(memoizedGrid, (gridCopy) => {
+                  gridCopy[i][j] = memoizedGrid[i][j] ? 0 : 1;
                 });
                 setGrid(newGrid);
                 handleCellToggle();
               }}
               className="w-2.5 h-2.5 border cursor-pointer border-zinc-900"
               style={{
-                backgroundColor: grid[i][j] ? aliveColor : deadColor,
+                backgroundColor: memoizedGrid[i][j] ? aliveColor : deadColor,
               }}
             />
           ))
